@@ -18,19 +18,18 @@ class TriviaTestCase(unittest.TestCase):
         self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
+        self.new_question = {
+            'question': 'Nani?',
+            'answer': 'Osu',
+            'difficulty': 5
+        }
+
         # binds the app to the current context
         with self.app.app_context():
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-
-        self.new_question = {
-            'question': 'Nani?',
-            'answer': 'Osu',
-            'category': 'Science',
-            'difficulty': 5
-        }
     
     def tearDown(self):
         """Executed after reach test"""
@@ -41,7 +40,12 @@ class TriviaTestCase(unittest.TestCase):
     Write at least one test for each test for successful operation and for expected errors.
     """
     def test_get_categories(self):
-        res = self.client()
+        res = self.client().get('/api/categories')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['categories'])
+        self.assertTrue(data['total_categories'])
 
     def test_get_questions(self):
         res = self.client().get('/api/questions')
@@ -74,6 +78,17 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['total_questions'])
 
     #def test_post_question_error(self):
+
+    def test_search_question(self):
+        res = self.client().post('/api/questions', json={'searchTerm':'soccer'})
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['total_questions'],2)
+        self.assertTrue(data['questions'])
+
+    #def test_search_question_error(self):
 
 
 # Make the tests conveniently executable

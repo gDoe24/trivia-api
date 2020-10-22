@@ -55,9 +55,12 @@ def create_app(test_config=None):
 
   @app.route('/api/categories')
   def all_categories():
+
+    categories = categories_list()
     return jsonify({
       'success':True,
-      
+      'categories': categories,
+      'total_categories': len(categories)
     })
   
 
@@ -89,8 +92,8 @@ def create_app(test_config=None):
     return jsonify({
       'success':True,
       'questions':current_questions,
-      'totalQuestions': len(current_questions),
-      'currentCategory': None,
+      'total_questions': len(selection),
+      'current_category': None,
       'categories': categories_list(),
     })
     #get the posted attributes from the form (question, answer, category, difficulty); insert them to the database; return success, question id, total questions
@@ -103,7 +106,7 @@ def create_app(test_config=None):
   TEST: When you click the trash icon next to a question, the question will be removed.
   This removal will persist in the database and when you refresh the page. 
   '''
-  
+
   @app.route('/api/questions/<question_id>', methods=['DELETE'])
   def question_by_id(question_id):
     try:
@@ -130,33 +133,7 @@ def create_app(test_config=None):
   TEST: When you submit a question on the "Add" tab, 
   the form will clear and the question will appear at the end of the last page
   of the questions list in the "List" tab.  
-  '''
-  @app.route('/api/questions', methods=['POST'])
-  def create_question():
-    body = request.get_json()
-    question = body.get('question')
-    answer = body.get('answer')
-    category = body.get('category')
-    difficulty = body.get('difficulty')
-    
-    try:
-      new_question = Question(question=question, answer=answer, category=category, difficulty=difficulty)
-      new_question.insert()
 
-      selection = Question.query.order_by(Question.id).all()
-      current_questions = paginate_questions(request, selection)
-      
-      return jsonify({
-        'success':True,
-        'questions': current_questions,
-        'total_questions': len(current_questions)
-      })
-        
-    except:
-      abort(422)
-
-  '''
-  @TODO: 
   Create a POST endpoint to get questions based on a search term. 
   It should return any questions for whom the search term 
   is a substring of the question. 
@@ -165,6 +142,42 @@ def create_app(test_config=None):
   only question that include that string within their question. 
   Try using the word "title" to start. 
   '''
+  @app.route('/api/questions', methods=['POST'])
+  def create_question():
+    body = request.get_json()
+    new_question = body.get('question', None)
+    new_answer = body.get('answer', None)
+    new_category = body.get('category', None)
+    new_difficulty = body.get('difficulty', None)
+    search_term = body.get('searchTerm',None)
+    
+    try:
+      if search_term:
+        searched_questions = Question.query.filter(Question.question.ilike(f"%{search_term}%")).all()
+        p_questions = paginate_questions(request, searched_questions)
+        
+        return jsonify({
+          'success':True,
+          'questions':p_questions,
+          'total_questions':len(p_questions),
+          'current_category':None
+        })
+
+      else:
+        new_question = Question(question=new_question, answer=new_answer, category=new_category, difficulty=new_difficulty)
+        new_question.insert()
+
+        selection = Question.query.order_by(Question.id).all()
+        current_questions = paginate_questions(request, selection)
+        
+        return jsonify({
+          'success':True,
+          'questions': current_questions,
+          'total_questions': len(current_questions)
+        })
+        
+    except:
+      abort(422)
 
   '''
   @TODO: 
