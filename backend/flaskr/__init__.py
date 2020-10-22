@@ -89,6 +89,9 @@ def create_app(test_config=None):
     selection = Question.query.order_by(Question.id).all()
     current_questions = paginate_questions(request, selection)
 
+    if len(current_questions)==0:
+      abort(404)
+
     return jsonify({
       'success':True,
       'questions':current_questions,
@@ -96,7 +99,7 @@ def create_app(test_config=None):
       'current_category': None,
       'categories': categories_list(),
     })
-    #get the posted attributes from the form (question, answer, category, difficulty); insert them to the database; return success, question id, total questions
+   
     
 
   '''
@@ -156,6 +159,7 @@ def create_app(test_config=None):
         searched_questions = Question.query.filter(Question.question.ilike(f"%{search_term}%")).all()
         p_questions = paginate_questions(request, searched_questions)
         
+        
         return jsonify({
           'success':True,
           'questions':p_questions,
@@ -164,6 +168,9 @@ def create_app(test_config=None):
         })
 
       else:
+        if new_question == '' or new_answer == '':
+          abort(422)
+
         new_question = Question(question=new_question, answer=new_answer, category=new_category, difficulty=new_difficulty)
         new_question.insert()
 
@@ -187,7 +194,21 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
+  @app.route('/api/categories/<category_id>/questions')
+  def questions_by_category(category_id):
+    #get questions with category id == to category_id
+    try:
+      questions = Question.query.filter(Question.category == category_id).all()
+      current_questions = paginate_questions(request, questions)
 
+      return jsonify({
+        'success':True,
+        'questions': current_questions,
+        'total_questions':len(current_questions),
+        'current_category':category_id
+      })
+    except:
+      abort(404)
 
   '''
   @TODO: 
@@ -206,6 +227,29 @@ def create_app(test_config=None):
   Create error handlers for all expected errors 
   including 404 and 422. 
   '''
+  @app.errorhandler(400)
+  def bad_request(error):
+    return jsonify({
+      'success': False,
+      'error':400,
+      'message': 'Bad Request'
+    }), 400
+
+  @app.errorhandler(404)
+  def not_found(error):
+    return jsonify({
+      'success': False,
+      'error': 404,
+      'message': 'Resource Not Found',
+    }), 404
+
+  @app.errorhandler(422)
+  def unprocessable_request(error):
+    return jsonify({
+      'success': False,
+      'error': 422,
+      'message': 'Unprocessable Request'
+    }), 422
   
   return app
 
