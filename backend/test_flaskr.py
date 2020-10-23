@@ -74,7 +74,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'],False)
         self.assertTrue(data['message'])
-    '''
+    
     def test_delete_question(self):
 
         res = self.client().delete('/api/questions/4')
@@ -83,7 +83,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'],True)
         self.assertEqual(data['deleted'], 4)
-    '''
+    
     #Test delete question that does not exist returns 422
     def test_delete_questions_error(self):
         res = self.client().delete('/api/questions/1000')
@@ -161,6 +161,32 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertEqual(data['total_questions'],0)
+
+    #Test quizzes endpoint with science category id and 2 previous questions in Science category returns len of questions -2 
+    def test_quizzes(self):
+        res = self.client().post("/api/quizzes", json={'quiz_category':
+            {'id':'1'},
+            'previous_questions':[20,22]
+            })
+        data = json.loads(res.data)
+        total_questions = Question.query.filter(Question.category==1).all()
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'],True)
+        self.assertEqual(data['total_questions'],len(total_questions)-2)
+        self.assertTrue(data['question'])
+
+    #Test 404 if no more questions for category
+    def test_quizzes_error(self):
+        res = self.client().post("/api/quizzes", json={'quiz_category':
+            {'id':'1'},
+            'previous_questions':[20,22,21]
+            })
+        data = json.loads(res.data)
+        
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'],False)
+        self.assertTrue(data['message'])
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

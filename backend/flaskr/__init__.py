@@ -221,7 +221,36 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
+  #Get a question based on a category, or all categories
+  #return a random question from that category if not in previous questions
+  @app.route('/api/quizzes', methods=['POST'])
+  def quizzes():
+    body = request.get_json()
+    previous_question = body.get('previous_questions', None)
+    category = body.get('quiz_category')
+    current_category = category.get('id')
 
+    if current_category != 0:
+      current_questions = Question.query.filter(Question.category == current_category).all()
+    else:
+      current_questions = Question.query.all()
+
+    questions = []
+    for q in current_questions:
+      if q.id not in previous_question:
+        questions.append(q)
+
+    if len(questions)==0:
+      abort(404)
+
+    random_question = random.choice(questions)
+    format_question = random_question.format()
+    #return random question
+    return jsonify({
+      'success': True,
+      'question': format_question,
+      'total_questions': len(questions),
+    })
   '''
   @TODO: 
   Create error handlers for all expected errors 
