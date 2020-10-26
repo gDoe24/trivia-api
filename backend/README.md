@@ -65,21 +65,59 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 
 BASE URL: The backend is hosted at the default URL, http://127.0.0.1:5000
 
-#### Endpoints
+### Endpoints
 
-##### GET /api/categories
+#### GET /api/categories
+* Fetches a dictionary of categories in which the key matches id and value matches the of the string corresponding to the respective category.
+* Returns an object, categories, that contains objects of id:category string key:value pairs along with the total number of categories.
+```
+{
+  '1' : "Science",
+  '2' : "Art",
+  '3' : "Geography",
+  '4' : "History",
+  '5' : "Entertainment",
+  '6' : "Sports"
+}
+```
 
-##### GET /api/categories/<category_id>
+#### GET /api/categories/<category_id>
 
-##### GET /api/questions
+* Fetches a dictionary object of the category matching the category id specified in the URI
+* Returns: single object of id:category string key:value pair.
 
-##### POST /api/questions
+#### GET /api/questions
 
-##### DELETE /api/questions/<question_id>
+* Fetches a dictionary of questions containing the keys: id, question, answer, category, and difficulty along with their values.
+* Returns: an object with key, questions, containing objects of id:id, question: question string, answer: answer string, category: category int, and difficulty: difficulty int; the total amount of questions in the database, and the an object, categories, of id:category string key:value pair.
 
-##### GET /api/categories/<category_id>/questions
+#### POST /api/questions
 
-##### POST /api/quizzes
+1) Creates a question by sending a post method to the database
+  - Request arguments: JSON dictionary object of keys: value pairs question: question string, answer: answer string, category: category int, and difficulty: difficulty int and their respective values
+  - Returns: an object with key, questions, containing objects of id:id, question: question string, answer: answer string, category: category int, and difficulty: difficulty int; the total amount of questions in the database
+  
+OR
+
+2) Search for questions using a substring.
+  - Request arguments: dictionary object of key:value searchTerm:substring.
+  - Returns: an object containing objects for questions, and total questions.
+
+#### DELETE /api/questions/<question_id>
+
+* Deletes a question from the database
+* Request arguments: None
+* Returns: An object of the deleted question's id and all questions paginated.
+
+#### GET /api/categories/<category_id>/questions
+
+* Fetches all of the questions contained in category matching the category_id
+* Returns: An object, questions, containing an object for each question with a category id matching category_id; an object of total_questions related to the specified category; an object of key:value pair current category: category.id
+
+#### POST /api/quizzes
+
+* 
+* Request arguments: previous question and current category
 
 REVIEW_COMMENT
 ```
