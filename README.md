@@ -6,26 +6,6 @@ Create your own trivia game for you or your team/friends to play complete with c
 
 ## Getting Started
 
-### Prerequisites and Local Develpment
-
-#### Python 3.7
-
-Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
-
-#### Virtual Environment
-
-We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
-
-#### Installing Dependencies
-
-Change directories into the backend folder and run:
-
-```bash
-pip install -r requirements.txt
-```
-This will install all of the dependencies in the requirements.txt file.
-
-
 ### Frontend Setup
 
 Follow the README.md in the frontend folder to follow instructions on setting up the react environment.
