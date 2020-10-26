@@ -65,6 +65,22 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 
 BASE URL: The backend is hosted at the default URL, http://127.0.0.1:5000
 
+#### Endpoints
+
+##### GET /api/categories
+
+##### GET /api/categories/<category_id>
+
+##### GET /api/questions
+
+##### POST /api/questions
+
+##### DELETE /api/questions/<question_id>
+
+##### GET /api/categories/<category_id>/questions
+
+##### POST /api/quizzes
+
 REVIEW_COMMENT
 ```
 This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
