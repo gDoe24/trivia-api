@@ -35,11 +35,12 @@ With Postgres running, restore a database using the trivia.psql file provided. F
 ```bash
 psql trivia < trivia.psql
 ```
-### For testing
+### Testing
 To run tests using the test database file provided, with Postgres running, enter the commands:
 
 ```bash
 psql trivia_test < trivia.psql
+python test_flaskr.py
 ```
 
 ## Running the server
