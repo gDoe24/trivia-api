@@ -26,13 +26,19 @@ pip install -r requirements.txt
 This will install all of the dependencies in the requirements.txt file.
 
 
+### Frontend Setup
 
-## Tasks
+Follow the README.md in the frontend folder to follow instructions on setting up the react environment.
 
-There are `TODO` comments throughout project. Start by reading the READMEs in:
+[`./frontend/`](./frontend/README.md)
 
-1. [`./frontend/`](./frontend/README.md)
-2. [`./backend/`](./backend/README.md)
+### Backend Setup
+
+Follow the README.md in the backend folder to follow instructions on setting up the local environment along with project endpoints.
+
+[`./backend/`](./backend/README.md)
+
+
 
 We recommend following the instructions in those files in order. This order will look familiar from our prior work in the course.
 
