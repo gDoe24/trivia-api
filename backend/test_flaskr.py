@@ -74,7 +74,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'],False)
         self.assertTrue(data['message'])
-    
+    '''
     def test_delete_question(self):
 
         res = self.client().delete('/api/questions/4')
@@ -92,7 +92,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertTrue(data['message'])
-
+    '''
     #Test creating a new question
     def test_post_question(self):
         res = self.client().post('/api/questions', json=self.new_question)
