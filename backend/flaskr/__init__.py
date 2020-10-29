@@ -3,6 +3,7 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
+import json
 
 from models import setup_db, Question, Category
 
@@ -34,7 +35,7 @@ def create_app(test_config=None):
   @app.after_request
   def after_request(response):
     response.headers.add('ACCESS-CONTROL-ALLOW-HEADERS','Content-Type,Authorization,true')
-    response.headers.add('ACCESS-CONTROL-ALLOW-METHODS',"POST,GET,PATCH,DELETE,PUT")
+    response.headers.add('ACCESS-CONTROL-ALLOW-METHODS','POST,GET,PATCH,DELETE,PUT')
     return response
   '''
   @TODO: 
@@ -95,8 +96,6 @@ def create_app(test_config=None):
       'categories': categories_list(),
     })
    
-    
-
   '''
   @TODO: 
   Create an endpoint to DELETE question using a question ID. 
@@ -171,11 +170,13 @@ def create_app(test_config=None):
 
         selection = Question.query.order_by(Question.id).all()
         current_questions = paginate_questions(request, selection)
+        posted_question = Question.query.filter(Question.answer==new_question.answer).one_or_none()
         
         return jsonify({
           'success':True,
+          'question_id': posted_question.id,
           'questions': current_questions,
-          'total_questions': len(current_questions)
+          'total_questions': len(selection)
         })
         
     except:
