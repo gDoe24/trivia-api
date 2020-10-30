@@ -35,13 +35,7 @@ With Postgres running, restore a database using the trivia.psql file provided. F
 ```bash
 psql trivia < trivia.psql
 ```
-### Testing
-To run tests using the test database file provided, with Postgres running, enter the commands:
 
-```bash
-psql trivia_test < trivia.psql
-python test_flaskr.py
-```
 
 ## Running the server
 
@@ -64,6 +58,24 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 ### Getting Started
 
 BASE URL: The backend is hosted at the default URL, http://127.0.0.1:5000
+
+### Errors
+
+Errors are returned as JSON objects in the following format:
+
+'''
+{
+  "error": 404, 
+  "message": "Resource Not Found", 
+  "success": false
+}
+'''
+The API recognizes three error types for failed requests:
+
+* 400
+* 404
+* 422
+
 
 ### Endpoints
 
@@ -302,38 +314,37 @@ OR
 ```
 #### POST /api/quizzes
 
-* 
-* Request arguments: previous question and current category
+* Fetch a random question that has not been previously answered
+* Request arguments: an object containing the current quiz category, a key:value pair of id: string id, and an array of the ids of all previous questions
 
-REVIEW_COMMENT
-```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
+'''
+{ 
+  "quiz_category":
+      {"id":"1"},
+  "previous_questions":[20]
+}
+'''
+* Returns a random question from either the specified category or all categories along with the total questions remaining.
+'''
+{
+  "question": {
+    "answer": "Alexander Fleming", 
+    "category": 1, 
+    "difficulty": 3, 
+    "id": 21, 
+    "question": "Who discovered penicillin?"
+  }, 
+  "success": true, 
+  "total_questions": 2
+}
+'''
 
-Endpoints
-GET '/categories'
-GET ...
-POST ...
-DELETE ...
+### Testing
+To run tests using the test database file provided, with Postgres running, enter the commands:
 
-GET '/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
-
-```
-
-
-## Testing
-To run the tests, run
-```
-dropdb trivia_test
-createdb trivia_test
-psql trivia_test < trivia.psql
+```bash
+psql dropdb trivia_test
+psql createdb trivia_test
+psql trivia_test < test_trivia.psql
 python test_flaskr.py
 ```
