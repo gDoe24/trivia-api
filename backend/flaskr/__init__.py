@@ -164,7 +164,7 @@ def create_app(test_config=None):
       else:
         if new_question == '' or new_answer == '':
           abort(422)
-
+          
         new_question = Question(question=new_question, answer=new_answer, category=new_category, difficulty=new_difficulty)
         new_question.insert()
 

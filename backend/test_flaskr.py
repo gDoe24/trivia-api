@@ -15,13 +15,14 @@ class TriviaTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "trivia_test"
-        self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
+        self.database_path = "postgresql://postgres@{}/{}".format('localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
         self.new_question = {
-            'question': 'Nani?',
-            'answer': 'Osu',
-            'difficulty': 5
+            "question":"Which position player holds the NFL record for most touchdowns?",
+            "answer":"Jerry Rice",
+            "category":"6",
+            "difficulty":3
         }
 
         # binds the app to the current context
@@ -34,6 +35,8 @@ class TriviaTestCase(unittest.TestCase):
     def tearDown(self):
         """Executed after reach test"""
         pass
+        
+        
 
     """
     TODO
@@ -46,7 +49,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['categories'])
-        self.assertTrue(data['total_categories'])
+        self.assertEqual(data['total_categories'],6)
 
     #Test a request for bad url returns 404 message
     def test_get_categories_error(self):
@@ -74,15 +77,19 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'],False)
         self.assertTrue(data['message'])
-    '''
+    
+    #Test delete question using the first question
     def test_delete_question(self):
 
-        res = self.client().delete('/api/questions/4')
+        question = Question.query.first()
+        question_id = question.id
+        res = self.client().delete(f'/api/questions/{question_id}')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'],True)
-        self.assertEqual(data['deleted'], 4)
+        self.assertEqual(data['deleted'], question_id)
+    
     
     #Test delete question that does not exist returns 422
     def test_delete_questions_error(self):
@@ -92,7 +99,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertTrue(data['message'])
-    '''
+
     #Test creating a new question
     def test_post_question(self):
         res = self.client().post('/api/questions', json=self.new_question)
@@ -102,6 +109,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'],True)
         self.assertTrue(data['questions'])
         self.assertTrue(data['total_questions'])
+
+        question = Question.query.order_by(Question.id.desc()).first()
+        question.delete()
 
     #Test creating a question with no question/answer attribute
     def test_post_question_error(self):
@@ -143,7 +153,7 @@ class TriviaTestCase(unittest.TestCase):
         #pass in Science category and test that the return contains expected number of questions
         current_category = 1
         total_questions = Question.query.filter(Question.category==current_category).all()
-        res = self.client().get(f"/api/categories/{current_category}/questions")
+        res = self.client().get("/api/categories/1/questions")
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
