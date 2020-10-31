@@ -63,13 +63,13 @@ BASE URL: The backend is hosted at the default URL, http://127.0.0.1:5000
 
 Errors are returned as JSON objects in the following format:
 
-'''
+```
 {
   "error": 404, 
   "message": "Resource Not Found", 
   "success": false
 }
-'''
+```
 The API recognizes three error types for failed requests:
 
 * 400
@@ -202,11 +202,11 @@ OR
 2) Search for questions using a substring.
   - Request arguments: dictionary object of key:value searchTerm:substring.
 
-'''
+```
 {
     "searchTerm":"soccer"
 }
-'''
+```
 
   - Returns: an object containing objects for questions, and total questions.
 
@@ -318,15 +318,16 @@ OR
 * Fetch a random question that has not been previously answered
 * Request arguments: an object containing the current quiz category, a key:value pair of id: string id, and an array of the ids of all previous questions
 
-'''
+
+```
 { 
   "quiz_category":
       {"id":"1"},
   "previous_questions":[20]
 }
-'''
+```
 * Returns a random question from either the specified category or all categories along with the total questions remaining.
-'''
+```
 {
   "question": {
     "answer": "Alexander Fleming", 
@@ -338,7 +339,7 @@ OR
   "success": true, 
   "total_questions": 2
 }
-'''
+```
 
 ### Testing
 To run tests using the test database file provided, with Postgres running, enter the commands:
@@ -348,4 +349,5 @@ psql dropdb trivia_test
 psql createdb trivia_test
 psql trivia_test < test_trivia.psql
 python test_flaskr.py
+
 ```
