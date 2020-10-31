@@ -75,6 +75,7 @@ The API recognizes three error types for failed requests:
 * 400
 * 404
 * 422
+* 500
 
 
 ### Endpoints
