@@ -111,13 +111,14 @@ The API recognizes three error types for failed requests:
 #### GET /api/questions
 
 * Fetches a dictionary of paginated questions containing the keys: id, question, answer, category, and difficulty along with their values.
-* Returns: an object with key, questions, containing objects of id:id, question: question string, answer: answer string, category: category int, and difficulty: difficulty int; the total amount of questions in the database, and the an object, categories, of id:category string key:value pair.
+* Returns: an object with key, questions, containing objects of id:id, question: question string, answer: answer string, category: category int, and difficulty: difficulty int; the total amount of questions in the database, and an array of current categories
 
 ```
 {
     "categories":{
         "1":"Science",
-        "2":"Art","3":"Geography",
+        "2":"Art",
+        "3":"Geography",
         ...
         },
         "current_category":null,
