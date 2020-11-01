@@ -45,6 +45,10 @@ class TriviaTestCase(unittest.TestCase):
     Write at least one test for each test for successful operation
     and for expected errors.
     """
+
+    '''
+    GET Methods
+    '''
     # Test get all categories
     def test_get_categories(self):
         res = self.client().get('/api/categories')
@@ -81,27 +85,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertTrue(data['message'])
 
-    # Test delete question using the first question
-    def test_delete_question(self):
-
-        question = Question.query.first()
-        question_id = question.id
-        res = self.client().delete(f'/api/questions/{question_id}')
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted'], question_id)
-
-    # Test delete question that does not exist returns 422
-    def test_delete_questions_error(self):
-        res = self.client().delete('/api/questions/1000')
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 422)
-        self.assertEqual(data['success'], False)
-        self.assertTrue(data['message'])
-
+    '''
+    POST Methods
+    '''
     # Test creating a new question
     def test_post_question(self):
         res = self.client().post('/api/questions', json=self.new_question)
@@ -112,6 +98,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['questions'])
         self.assertTrue(data['total_questions'])
 
+        # Delete the question after running test
         question = Question.query.order_by(Question.id.desc()).first()
         question.delete()
 
@@ -158,9 +145,7 @@ class TriviaTestCase(unittest.TestCase):
         # Pass in Science category
         # Test that the return contains expected number of questions
         current_category = 1
-        total_questions = Question.query.filter(
-                                                Question.category == current_category
-                                                ).all()
+        total_questions = Question.query.filter(Question.category == current_category).all()
         res = self.client().get("/api/categories/1/questions")
         data = json.loads(res.data)
 
@@ -180,6 +165,42 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertEqual(data['total_questions'], 0)
 
+    '''
+    DELETE Methods
+    '''
+    # Test delete question using the first question
+    def test_delete_question(self):
+
+        # Post a new question then delete
+        payload = {
+            "question":
+            "Which team won Super Bowl LII?",
+            "answer": "Philadelphia Eagles",
+            "category": "6",
+            "difficulty": 2
+        }
+        res1 = self.client().post('/api/questions', json=payload)
+        question = Question.query.order_by(Question.id.desc()).first()
+        question_id = question.id
+        res2 = self.client().delete(f'/api/questions/{question_id}')
+        data = json.loads(res2.data)
+
+        self.assertEqual(res2.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['deleted'], question_id)
+
+    # Test delete question that does not exist returns 422
+    def test_delete_questions_error(self):
+        res = self.client().delete('/api/questions/1000')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertTrue(data['message'])
+
+    '''
+    TEST QUIZ
+    '''
     # Test quizzes endpoint with science category id and 2 previous questions
     # in Science category returns len of questions -2
     def test_quizzes(self):
@@ -196,8 +217,8 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['total_questions'], len(total_questions)-2)
         self.assertTrue(data['question'])
 
-    # Test 404 if no more questions for category
-    def test_quizzes_error(self):
+    # Test 0 Total questions if no more questions for category
+    def test_quizzes_total_questions(self):
         res = self.client().post("/api/quizzes", json={'quiz_category':
                                                        {'id': '1'},
                                                        'previous_questions':
@@ -205,9 +226,9 @@ class TriviaTestCase(unittest.TestCase):
                                                        })
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 404)
-        self.assertEqual(data['success'], False)
-        self.assertTrue(data['message'])
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['total_questions'], 0)
 
 
 # Make the tests conveniently executable

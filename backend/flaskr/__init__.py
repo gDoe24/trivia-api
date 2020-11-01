@@ -93,11 +93,16 @@ def create_app(test_config=None):
         if len(current_questions) == 0:
             abort(404)
 
+        current_categories = []
+        for q in selection:
+            if q.category not in current_categories:
+                current_categories.append(q.category)
+
         return jsonify({
           'success': True,
           'questions': current_questions,
           'total_questions': len(selection),
-          'current_category': None,
+          'current_category': current_categories,
           'categories': categories_list(),
         })
 
@@ -160,9 +165,8 @@ def create_app(test_config=None):
         try:
             if search_term:
                 searched_questions = Question.query.filter(
-                                                          Question.question.ilike(
-                                                            f"%{search_term}%")
-                                                          ).all()
+                                                           Question.question.ilike(f"%{search_term}%")
+                                                           ).all()
                 p_questions = paginate_questions(request, searched_questions)
 
                 return jsonify({
@@ -260,7 +264,8 @@ def create_app(test_config=None):
 
         if len(questions) == 0:
             return jsonify({
-              'success': True
+              'success': True,
+              'total_questions': 0
             })
 
         random_question = random.choice(questions)

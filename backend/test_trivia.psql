@@ -24,6 +24,7 @@ SET default_with_oids = false;
 -- Name: categories; Type: TABLE; Schema: public; Owner: caryn
 --
 
+DROP DATABASE trivia_test;
 CREATE DATABASE trivia_test;
 \c trivia_test;
 
