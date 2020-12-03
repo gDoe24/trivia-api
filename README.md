@@ -20,22 +20,4 @@ Follow the README.md in the backend folder to follow instructions on setting up 
 
 
 
-We recommend following the instructions in those files in order. This order will look familiar from our prior work in the course.
-
-## Starting and Submitting the Project
-
-[Fork](https://help.github.com/en/articles/fork-a-repo) the [project repository]() and [Clone](https://help.github.com/en/articles/cloning-a-repository) your forked repository to your machine. Work on the project locally and make sure to push all your changes to the remote repository before submitting the link to your repository in the Classroom. 
-
-## About the Stack
-
-We started the full stack application for you. It is desiged with some key functional areas:
-
-### Backend
-
-The `./backend` directory contains a completed Flask and SQLAlchemy server.
-
-### Frontend
-
-The `./frontend` directory contains a complete React frontend to consume the data from the Flask server.
-
-[View the README.md within ./frontend for more details.](./frontend/README.md)
+We recommend following the instructions in those files in order.
