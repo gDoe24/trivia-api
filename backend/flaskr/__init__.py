@@ -5,7 +5,7 @@ from flask_cors import CORS
 import random
 import json
 
-from models import setup_db, Question, Category
+from ..models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
@@ -53,6 +53,10 @@ def create_app(test_config=None):
             categories[category.id] = category.type
 
         return categories
+
+    @app.route('/')
+    def check_status():
+        return "Healthy"
 
     @app.route('/api/categories')
     def all_categories():
