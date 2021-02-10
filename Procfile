@@ -1,1 +1,1 @@
-web: gunicorn --chdir backend app:flaskr
+web: gunicorn --chdir backend flaskr:create_app
