@@ -5,7 +5,7 @@ from flask_cors import CORS
 import random
 import json
 
-from models import setup_db, Question, Category
+from .models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
