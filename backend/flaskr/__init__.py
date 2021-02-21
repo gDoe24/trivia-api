@@ -31,7 +31,7 @@ def create_app(test_config=None):
     Done: Set up CORS. Allow '*' for origins.
     Delete the sample route after completing the TODOs
     '''
-    cors = CORS(app, resources={r"/api/*": {"origins": "https://trivia4you.com/*"}})
+    cors = CORS(app, resources={r"/api/*": {"origins": "https://trivia4you.herokuapp.com/*"}})
     '''
     Done: Use the after_request decorator to set Access-Control-Allow
     '''
