@@ -31,7 +31,7 @@ def create_app(test_config=None):
     Done: Set up CORS. Allow '*' for origins.
     Delete the sample route after completing the TODOs
     '''
-    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+    cors = CORS(app, resources={r"/api/*": {"origins": "https://trivia4you.com/*"}})
     '''
     Done: Use the after_request decorator to set Access-Control-Allow
     '''
@@ -40,7 +40,7 @@ def create_app(test_config=None):
         response.headers.add('ACCESS-CONTROL-ALLOW-HEADERS',
                              'Content-Type,Authorization,true')
         response.headers.add('ACCESS-CONTROL-ALLOW-METHODS',
-                             'POST,GET,PATCH,DELETE,PUT')
+                             'POST,GET,PATCH,DELETE')
         return response
     '''
     Done:

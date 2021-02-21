@@ -22,7 +22,7 @@ class QuizView extends Component {
 
   componentDidMount(){
     $.ajax({
-      url: `/api/categories`, //TODO: update request URL
+      url: "https://trivia4u.herokuapp.com/api/categories", //TODO: update request URL
       type: "GET",
       success: (result) => {
         this.setState({ categories: result.categories })
@@ -48,10 +48,11 @@ class QuizView extends Component {
     if(this.state.currentQuestion.id) { previousQuestions.push(this.state.currentQuestion.id) }
 
     $.ajax({
-      url: 'api/quizzes', //TODO: update request URL
+      url: 'https://trivia4u.herokuapp.com/api/quizzes', //TODO: update request URL
       type: "POST",
       dataType: 'json',
       contentType: 'application/json',
+      withCredentials: true,
       data: JSON.stringify({
         previous_questions: previousQuestions,
         quiz_category: this.state.quizCategory
