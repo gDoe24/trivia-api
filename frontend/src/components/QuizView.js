@@ -52,14 +52,10 @@ class QuizView extends Component {
       type: "POST",
       dataType: 'json',
       contentType: 'application/json',
-      withCredentials: true,
       data: JSON.stringify({
         previous_questions: previousQuestions,
         quiz_category: this.state.quizCategory
       }),
-      xhrFields: {
-        withCredentials: true
-      },
       crossDomain: true,
       success: (result) => {
         this.setState({
